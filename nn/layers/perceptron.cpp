@@ -1,8 +1,12 @@
 #include <vector>
+#include "utility.cpp"
 
 class perceptronLayer 
 {
-
-
-    vector
+    public:
+        std::vector <float> predict(std::vector<float> layer_in) {
+            
+        }
+    private:
+        matrix weights;
 };
