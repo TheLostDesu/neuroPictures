@@ -1,5 +1,6 @@
 #include <vector>
 #include "utility.cpp"
+
 class convolutionLayer
 {   
     public:
@@ -9,5 +10,5 @@ class convolutionLayer
             
         }
     private:
-        std::vector<std::vector<int>> convolutionMatrix;
+        std::vector<matrix> convolutionMatrixes;
 };
