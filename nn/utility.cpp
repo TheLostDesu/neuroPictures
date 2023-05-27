@@ -4,6 +4,12 @@
 class matrix
 {
     public:
+        matrix(float *data_, int x, int y) {
+            data.resize(x, std::vector<float>(y));
+            size_x = x;
+            size_y = y;
+        }
+
         int get_size_x() {
             return size_x;
         }
@@ -18,6 +24,9 @@ class matrix
         }
         void set(int x, int y, float val) {
             data[x][y] = val;
+        }
+        void add(int x, int y, float val) {
+            data[x][y] += val;
         }
         void set_size(int x, int y) {
             data.resize(x, std::vector<float>(y));

@@ -1,7 +1,8 @@
 #include "utility.cpp"
 #include <cuda_runtime.h>
 
-__global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) {
+__global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
+{
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -14,7 +15,8 @@ __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int cols
     }
 }
 
-void matrixMultiplicationGPU(float* A, float* B, float* C, int rowsA, int colsA, int colsB) {
+void matrixMultiplicationGPU(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
+{
     float* d_A;
     float* d_B;
     float* d_C;
@@ -41,8 +43,10 @@ void matrixMultiplicationGPU(float* A, float* B, float* C, int rowsA, int colsA,
     cudaFree(d_C);
 }
 
-matrix multiply(matrix_a, matrxi_b) {
-    if(device == "CUDA") {
+matrix multiply(matrix_a, matrxi_b) 
+{
+    if(device == "CUDA") 
+    {
         int rowsA = matrix_a.get_size_x();
         int colsA = matrix_a.get_size_y();
         int colsB = matrix_b.get_size_y();
@@ -53,6 +57,19 @@ matrix multiply(matrix_a, matrxi_b) {
         float C = new float[rowsA * colsB];
 
         matrixMultiplicationGPU(A, B, C, rowsA, colsA, colsB);
+        return matrix(C, rowsA, colsB);
     }
-    return C;
+    else 
+    {   
+        //  TODO: do n^2.5 matrix mul(if possible)
+        matrix c;
+        for(int i = 0; i < matrix_a.get_size_x(); ++i) {
+            for(int j = 0; j < matrix_a.get_size_y(); ++j) {
+                for(int k = 0; k < matrix_b.get_size_y(); ++k) {
+                    c.add(i, k, a[i][j] * b[j][k]);
+                }
+            } 
+        }
+        return c;
+    }
 }
