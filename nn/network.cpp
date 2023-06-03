@@ -14,4 +14,4 @@ class CNN
     private:
         int numberOfLayersC, numberOfLayersP;
         std::vector<int> a;
-};Ваня Грибанов лох
+};
