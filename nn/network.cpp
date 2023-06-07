@@ -10,7 +10,7 @@ class CNN
         ~CNN() {
             a.~vector();
         }
-
+        
     private:
         int numberOfLayersC, numberOfLayersP;
         std::vector<int> a;
