@@ -1,4 +1,5 @@
 #include <cuda_runtime.h>
+#include "device_launch_parameters.h"
 #include <vector>
 
 __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
@@ -43,7 +44,7 @@ std::vector<std::vector<float>> multiplyMatrices(const std::vector<std::vector<f
     
     for (int i = 0; i < rowsA; ++i) {
         for (int j = 0; j < colsB; ++j) {
-            result[i][j] = resultMatrix[i * colsB + j];
+            result[i][j] = deviceResultMatrix[i * colsB + j];
         }
     }
     cudaFree(deviceMatrixA);
