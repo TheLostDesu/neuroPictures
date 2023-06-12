@@ -72,29 +72,28 @@ std::vector<int> red PixelsToVector(std::string& imagePath) {
 <<<<<<< HEAD
 =======
 =======
-
-std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
-
+std::vector<std::vector<std::vector<int>>> getRGBMatrix(const std::string& imagePath) {
+    // Загрузка изображения с использованием OpenCV
     cv::Mat image = cv::imread(imagePath);
 
-    std::vector<cv::Mat> rgbMatrices;
-    cv::split(image, rgbMatrices);
+    // Получение размеров изображения
+    int height = image.rows;
+    int width = image.cols;
 
-    return rgbMatrices;
-}
+    // Создание трехмерной матрицы для хранения данных RGB
+    std::vector<std::vector<std::vector<int>>> rgbMatrix(height, std::vector<std::vector<int>>(width, std::vector<int>(3)));
 
-std::vector<int> matricesToVector(std::vector<cv::Mat>& matrices) {
-    std::vector<int> pixelVector;
-
-    for (int i = 0; i < size.height; ++i) {
-        for (int j = 0; j < size.width; ++j) {
-            for (const auto& matrix : matrices) {
-                pixelVector.push_back(matrix.at<uint8_t>(i, j));
-            }
+    // Преобразование изображения в матрицу RGB
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
+            rgbMatrix[i][j][0] = pixel[0];  // Красный канал
+            rgbMatrix[i][j][1] = pixel[1];  // Зеленый канал
+            rgbMatrix[i][j][2] = pixel[2];  // Синий канал
         }
     }
 
-    return pixelVector;
+    return rgbMatrix
 }
 
 >>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
