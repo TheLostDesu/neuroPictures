@@ -1,5 +1,5 @@
 #include <vector>
-#include "utility.cpp"
+#include "nn/utility.cpp"
 
 class poolingLayer
 {

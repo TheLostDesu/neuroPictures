@@ -1,5 +1,5 @@
 #include <vector>
-#include "utility.cpp"
+#include "nn/utility.cpp"
 
 class convolutionLayer
 {   
@@ -16,7 +16,10 @@ class convolutionLayer
             }
             
         }
+
+
     private:
+    
         std::vector<matrix> convolutionMatrixes;
 
 
@@ -32,7 +35,7 @@ class convolutionLayer
         }
 
 
-        
+
         std::vector<double> calculate_hidden_error(std::vector<double>& delta, std::vector<double>> & link_weights) {
             std::vector<double> hidden_error(link_weights[0].size(), 0.0);
 
