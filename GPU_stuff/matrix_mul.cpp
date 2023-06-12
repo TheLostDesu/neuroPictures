@@ -1,5 +1,5 @@
 #include <cuda_runtime.h>
-
+#include <vector>
 
 __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
 {
