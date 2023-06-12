@@ -1,5 +1,6 @@
 #include <cuda_runtime.h>
 
+
 __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
 {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
