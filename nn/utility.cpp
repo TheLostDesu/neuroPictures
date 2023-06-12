@@ -55,50 +55,6 @@ int max(int a, int b, int c, int d)
 {
     return std::max(std::max(a, b), std::max(c, d)); 
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
-=======
-//Для красного цвета
-std::vector<int> red PixelsToVector(std::string& imagePath) {
->>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
-    cv::Mat image = cv::imread(imagePath);
-
-    std::vector<cv::Mat> rgbMatrices;
-    cv::split(image, rgbMatrices);
-
-    return rgbMatrices;
-}
-<<<<<<< HEAD
-=======
-=======
-
-std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
-
-    cv::Mat image = cv::imread(imagePath);
-
-    std::vector<cv::Mat> rgbMatrices;
-    cv::split(image, rgbMatrices);
-
-    return rgbMatrices;
-}
-
-std::vector<int> matricesToVector(std::vector<cv::Mat>& matrices) {
-    std::vector<int> pixelVector;
-
-    for (int i = 0; i < size.height; ++i) {
-        for (int j = 0; j < size.width; ++j) {
-            for (const auto& matrix : matrices) {
-                pixelVector.push_back(matrix.at<uint8_t>(i, j));
-            }
-        }
-    }
-
-    return pixelVector;
-}
-
->>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
-
 
 
 uint32_t swap_endian(uint32_t val) {
