@@ -6,15 +6,15 @@ class perceptronLayer
     public:
         matrix predict(matrix layer_in) {
             if(layer_in.get_size_x() > 1) {
-                layer_in * weights;
+                return layer_in * weights;
             }
             else {
-                weights * layer_in; 
+                return weights * layer_in; 
             }
         }
         
     private:
-        void update_weights(vector<double>& input, vector<double>& gradients, double learning_rate)
+        void update_weights(std::vector<double>& input, std::vector<double>& gradients, double learning_rate)
         {
             int input_size = input.size();
             int gradients_size = gradients.size();
@@ -23,10 +23,12 @@ class perceptronLayer
             {
                 for (int j = 0; j < gradients_size; ++j)
                 {
-                    weights[i][j] += learning_rate * input[i] * gradients[i]
+                    weights.add(i, j, learning_rate * input[i] * gradients[i]);
                 }
             }
         }
+
+
         matrix weights;
 };
 

@@ -3,15 +3,17 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include "GPU_stuff/matrix_mul.cpp"
+#include "GPU_stuff/detect_device.cpp"
 
 
 class matrix
 {
     public:
-        matrix(float *data_, int x, int y) {
-            data.resize(x, std::vector<float>(y));
-            size_x = x;
-            size_y = y;
+        matrix(std::vector<std::vector<float>> data_) {
+            data = data_;
+            size_x = data.size();
+            size_y = data[0].size();
         }
 
         int get_size_x() {
@@ -45,6 +47,21 @@ class matrix
             }
             return ans;
         }
+        matrix operator *(matrix& other) const {
+            if(is_cuda()) {
+                return matrix(multiplyMatrices(data, other.get_data()));
+            }
+            else {
+                std::vector<std::vector<float>> ans; 
+                for(int i = 0; i < size_x; ++i) {
+                    for(int j = 0; j < size_y; ++j) {
+                        for(int k = 0; k < size_y; ++k) {
+                            ans[i][k] += data[i][j] * other.get(j, k);
+                        }
+                    }
+                }
+            }
+        }
 
     private:
         int size_x, size_y;
@@ -75,42 +92,3 @@ std::vector<std::vector<std::vector<int>>> getRGBMatrix(const std::string& image
     return rgbMatrix;
 }
 
-
-
-void read_mnist_cv(const char* image_filename, const char* label_filename){
-    std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-    std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-    uint32_t magic;
-    uint32_t num_items;
-    uint32_t num_labels;
-    uint32_t rows;
-    uint32_t cols;
-    image_file.read(reinterpret_cast<char*>(&magic), 4);
-    magic = swap_endian(magic);
-
-    image_file.read(reinterpret_cast<char*>(&num_items), 4);
-    num_items = swap_endian(num_items);
-    label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-    num_labels = swap_endian(num_labels);
-
-    image_file.read(reinterpret_cast<char*>(&rows), 4);
-    rows = swap_endian(rows);
-    image_file.read(reinterpret_cast<char*>(&cols), 4);
-    cols = swap_endian(cols);
-
-    char label;
-    char* pixels = new char[rows * cols];
-
-    for (int item_id = 0; item_id < num_items; ++item_id) {
-        image_file.read(pixels, rows * cols);
-        label_file.read(&label, 1);
-
-        std::string sLabel = std::to_string(int(label));
-        cv::Mat image_tmp(rows,cols,CV_8UC1,pixels);
-        cv::resize(image_tmp, image_tmp, cv::Size(100, 100));
-        cv::imshow(sLabel, image_tmp);
-        cv::waitKey(0);
-    }
-
-    delete[] pixels;
-}
