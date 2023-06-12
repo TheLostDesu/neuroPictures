@@ -1,5 +1,9 @@
 #include <vector>
 #include <cmath>
+<<<<<<< HEAD
+=======
+#include <iostream>
+>>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 #include <opencv2/opencv.hpp>
 
 class matrix
@@ -54,6 +58,7 @@ int max(int a, int b, int c, int d)
 {
     return std::max(std::max(a, b), std::max(c, d)); 
 }
+<<<<<<< HEAD
 //Для красного цвета
 std::vector<int> red PixelsToVector(std::string& imagePath) {
     cv::Mat image = cv::imread(imagePath);
@@ -103,4 +108,52 @@ std::vector<int> greenPixelsToVector(std::string& imagePath) {
     }
 
     return pixelVector;
+=======
+
+
+
+uint32_t swap_endian(uint32_t val) {
+    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
+    return (val << 16) | (val >> 16);
+}
+
+
+
+void read_mnist_cv(const char* image_filename, const char* label_filename){
+    std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+    std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+    uint32_t magic;
+    uint32_t num_items;
+    uint32_t num_labels;
+    uint32_t rows;
+    uint32_t cols;
+    image_file.read(reinterpret_cast<char*>(&magic), 4);
+    magic = swap_endian(magic);
+
+    image_file.read(reinterpret_cast<char*>(&num_items), 4);
+    num_items = swap_endian(num_items);
+    label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+    num_labels = swap_endian(num_labels);
+
+    image_file.read(reinterpret_cast<char*>(&rows), 4);
+    rows = swap_endian(rows);
+    image_file.read(reinterpret_cast<char*>(&cols), 4);
+    cols = swap_endian(cols);
+
+    char label;
+    char* pixels = new char[rows * cols];
+
+    for (int item_id = 0; item_id < num_items; ++item_id) {
+        image_file.read(pixels, rows * cols);
+        label_file.read(&label, 1);
+
+        string sLabel = std::to_string(int(label));
+        cv::Mat image_tmp(rows,cols,CV_8UC1,pixels);
+        cv::resize(image_tmp, image_tmp, cv::Size(100, 100));
+        cv::imshow(sLabel, image_tmp);
+        cv::waitKey(0);
+    }
+
+    delete[] pixels;
+>>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 }
