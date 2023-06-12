@@ -11,6 +11,13 @@ class CNN
             a.~vector();
         }
         
+        int recognize() {
+            
+        }
+        void learn() {
+
+        }
+
         
     private:
         std::vector<double> calculate_error(std::vector<double>& output_res, std::vector<double>& result)
