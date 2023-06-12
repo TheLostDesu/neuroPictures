@@ -62,6 +62,15 @@ class matrix
                 }
             }
         }
+        void relu(){
+            for (i = 0; i < size_x(); ++i){
+                for (j = 0; j < size_x(); ++j){
+                    if (data[i][j] < 0){
+                        data[i][j] = 0;
+                    }
+                }
+            }
+        }
 
     private:
         int size_x, size_y;
