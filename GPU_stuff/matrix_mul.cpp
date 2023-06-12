@@ -60,13 +60,15 @@ matrix multiply(matrix_a, matrxi_b)
         return matrix(C, rowsA, colsB);
     }
     else 
-    {   
-        //  TODO: do n^2.5 matrix mul(if possible)
+    {
         matrix c;
-        for(int i = 0; i < matrix_a.get_size_x(); ++i) {
-            for(int j = 0; j < matrix_a.get_size_y(); ++j) {
-                for(int k = 0; k < matrix_b.get_size_y(); ++k) {
-                    c.add(i, k, a[i][j] * b[j][k]);
+        for(int i = 0; i < matrix_a.get_size_x(); ++i) 
+        {
+            for(int j = 0; j < matrix_a.get_size_y(); ++j) 
+            {
+                for(int k = 0; k < matrix_b.get_size_y(); ++k) 
+                {
+                    c.add(i, k, matrix_a.get(i, j) * matrix_b.get(j, k));
                 }
             } 
         }
