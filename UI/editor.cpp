@@ -8,7 +8,7 @@
 
 bool drawing = false;
 cv::Point prevPoint;
-cv::Mat canvas(512, 512, CV_8UC3, cv::Scalar(255, 255, 255));
+cv::Mat canvas(100, 100, CV_8UC3, cv::Scalar(255, 255, 255));
 std::stack<cv::Mat> undoStack;
 std::stack<cv::Mat> redoStack;
 bool ctrlPressed = false;
