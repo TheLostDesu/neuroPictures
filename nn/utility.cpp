@@ -64,12 +64,16 @@ class matrix
         }
         void relu(){
             for (i = 0; i < size_x(); ++i){
-                for (j = 0; j < size_x(); ++j){
+                for (j = 0; j < size_y(); ++j){
                     if (data[i][j] < 0){
                         data[i][j] = 0;
                     }
                 }
             }
+        }
+
+        void calculate_gradient(){
+
         }
 
     private:
