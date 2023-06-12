@@ -5,11 +5,14 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <opencv2/opencv.hpp>
+#include "opencv2/opencv.hpp"
 #include <unistd.h>
 #include <libgen.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <QApplication>
+#include <QFileDialog>
+#include <QString>
 
 // Функция загрузки файла изображения
 std::string loadImage(const std::string& filename) {
@@ -111,7 +114,28 @@ void configureWindowByName(const std::string& windowName, int width, int height,
 // Функция для проверки, является ли файл изображением
 bool isImageFile(const std::string& filename) {
     std::string extension = filename.substr(filename.find_last_of(".") + 1);
-    return (extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "bmp");
+    return (extension == "jpg"  extension == "jpeg"  extension == "png" || extension == "bmp");
+}
+
+// Функция выбора папки в диалоговом окне
+std::string selectFolder() {
+    QApplication app(argc, argv);  // Создаем экземпляр QApplication
+
+    QFileDialog dialog;  // Создаем диалоговое окно
+    dialog.setFileMode(QFileDialog::Directory);  // Устанавливаем режим выбора папки
+    dialog.setOption(QFileDialog::ShowDirsOnly);  // Показывать только папки
+// Показываем диалоговое окно и ждем, пока пользователь выберет папку
+    if (dialog.exec()) {
+        // Получаем выбранную папку
+        QStringList selectedFolders = dialog.selectedFiles();
+        QString folderPath = selectedFolders.at(0);
+
+        // Преобразуем путь в строку типа std::string и возвращаем
+        return folderPath.toStdString();
+    }
+
+    // Если пользователь не выбрал папку, возвращаем пустую строку
+    return "";
 }
 
 int main() {
@@ -122,7 +146,12 @@ int main() {
         chdir(executableDir.c_str());
     }
 
-    std::string folderPath = "/path/to/folder";  // Замените на путь к папке с изображениями
+    std::string folderPath = selectFolder();  // Выбор папки в диалоговом окне
+    if (folderPath.empty()) {
+        std::cout << "No folder selected." << std::endl;
+        return 0;
+    }
+
     std::string outputFolderPath = "/path/to/output";  // Замените на путь к папке для сохранения изображений
 
     DIR* dir;
@@ -156,6 +185,7 @@ int main() {
             }
 
             std::string outputFilename = outputFolderPath + "/" + filename;
+
             try {
                 saveImage(outputFilename, imageData);
                 // Продолжение работы с сохраненным файлом
@@ -168,6 +198,7 @@ int main() {
 
             int windowWidth = 800;
             int windowHeight = 600;
+
             std::string windowName = "Window";
             try {
                 configureWindow(windowWidth, windowHeight, windowName);
