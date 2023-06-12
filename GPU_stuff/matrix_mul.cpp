@@ -1,4 +1,3 @@
-#include "utility.cpp"
 #include <cuda_runtime.h>
 
 __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
@@ -15,63 +14,39 @@ __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int cols
     }
 }
 
-void matrixMultiplicationGPU(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
+std::vector<std::vector<float>> multiplyMatrices(const std::vector<std::vector<float>>& matrixA, const std::vector<std::vector<float>>& matrixB)
 {
-    float* d_A;
-    float* d_B;
-    float* d_C;
-    size_t sizeA = rowsA * colsA * sizeof(float);
-    size_t sizeB = colsA * colsB * sizeof(float);
-    size_t sizeC = rowsA * colsB * sizeof(float);
+    int rowsA = matrixA.size();
+    int colsA = matrixA[0].size();
+    int rowsB = matrixB.size();
+    int colsB = matrixB[0].size();
+    std::vector<std::vector<float>> result(rowsA, std::vector<float>(colsB, 0));
 
-    cudaMalloc((void**)&d_A, sizeA);
-    cudaMalloc((void**)&d_B, sizeB);
-    cudaMalloc((void**)&d_C, sizeC);
+    float* deviceMatrixA;
+    float* deviceMatrixB;
+    float* deviceResultMatrix;
 
-    cudaMemcpy(d_A, A, sizeA, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B, sizeB, cudaMemcpyHostToDevice);
+    cudaMalloc((void**)&deviceMatrixA, rowsA * colsA * sizeof(float));
+    cudaMalloc((void**)&deviceMatrixB, rowsB * colsB * sizeof(float));
+    cudaMalloc((void**)&deviceResultMatrix, rowsA * colsB * sizeof(float));
 
-    dim3 threadsPerBlock(16, 16);
-    dim3 numBlocks((colsB + threadsPerBlock.x - 1) / threadsPerBlock.x, (rowsA + threadsPerBlock.y - 1) / threadsPerBlock.y);
+    cudaMemcpy(deviceMatrixA, matrixA.data(), rowsA * colsA * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(deviceMatrixB, matrixB.data(), rowsB * colsB * sizeof(float), cudaMemcpyHostToDevice);
 
-    matrixMultiply<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, rowsA, colsA, colsB);
+    dim3 blockSize(16, 16);
+    dim3 gridSize((colsB + blockSize.x - 1) / blockSize.x, (rowsA + blockSize.y - 1) / blockSize.y);
 
-    cudaMemcpy(C, d_C, sizeC, cudaMemcpyDeviceToHost);
+    matrixMultiply<<<gridSize, blockSize>>>(deviceMatrixA, deviceMatrixB, deviceResultMatrix,
+                                                  rowsA, colsA, colsB);
 
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
-}
-
-matrix multiply(matrix_a, matrxi_b) 
-{
-    if(device == "CUDA") 
-    {
-        int rowsA = matrix_a.get_size_x();
-        int colsA = matrix_a.get_size_y();
-        int colsB = matrix_b.get_size_y();
-
-        float *A = matrix_a.convert();
-        float *B = matrix_b.convert();
-
-        float C = new float[rowsA * colsB];
-
-        matrixMultiplicationGPU(A, B, C, rowsA, colsA, colsB);
-        return matrix(C, rowsA, colsB);
-    }
-    else 
-    {
-        matrix c;
-        for(int i = 0; i < matrix_a.get_size_x(); ++i) 
-        {
-            for(int j = 0; j < matrix_a.get_size_y(); ++j) 
-            {
-                for(int k = 0; k < matrix_b.get_size_y(); ++k) 
-                {
-                    c.add(i, k, matrix_a.get(i, j) * matrix_b.get(j, k));
-                }
-            } 
+    
+    for (int i = 0; i < rowsA; ++i) {
+        for (int j = 0; j < colsB; ++j) {
+            result[i][j] = resultMatrix[i * colsB + j];
         }
-        return c;
     }
+    cudaFree(deviceMatrixA);
+    cudaFree(deviceMatrixB);
+    cudaFree(deviceResultMatrix);
+    return result;
 }
