@@ -73,7 +73,16 @@ class matrix
         }
 
         void calculate_gradient(){
-
+            for (i = 0; i < size_x(); ++i){
+                for (j = 0; j < size_y(); ++j){
+                    if (data[i][j] > 0){
+                        data[i][j] = 1;
+                    }
+                    else{
+                        data[i][j] = 0;
+                }
+            }
+        }
         }
 
     private:
