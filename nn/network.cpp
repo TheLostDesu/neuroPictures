@@ -1,14 +1,18 @@
 #include <vector>
+#include "nn/layers/convolution.cpp"
+#include "nn/layers/perceptron.cpp"
+#include "nn/layers/pooling.cpp"
 
 class CNN 
 {
     public:
-        CNN(int numberOfLayersC_, int numberOfLayersP_) {
+        CNN(int numberOfLayersC_, int numberOfLayersP_, std::vector<std::pair<int, int>> convolution_params, std::vector<int> pooling_params) {
             numberOfLayersC = numberOfLayersC_;
             numberOfLayersP = numberOfLayersP_;
-        }
-        ~CNN() {
-            a.~vector();
+            prc.resize(numberOfLayersP);
+            conv.resize(numberOfLayersC);
+            pool.resize(numberOfLayersC);
+
         }
         
         int recognize() {
@@ -33,5 +37,7 @@ class CNN
         }
 
         int numberOfLayersC, numberOfLayersP;
-        std::vector<int> a;
+        std::vector<perceptronLayer> prc;
+        std::vector<convolutionLayer> conv;
+        std::vector<poolingLayer> pool;
 };

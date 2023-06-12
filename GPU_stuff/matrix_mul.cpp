@@ -1,6 +1,7 @@
+#include <vector>
 #include <cuda_runtime.h>
 #include "device_launch_parameters.h"
-#include <vector>
+#include "device_functions.h"
 
 __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int colsA, int colsB) 
 {
@@ -15,6 +16,7 @@ __global__ void matrixMultiply(float* A, float* B, float* C, int rowsA, int cols
         C[row * colsB + col] = sum;
     }
 }
+
 
 std::vector<std::vector<float>> multiplyMatrices(const std::vector<std::vector<float>>& matrixA, const std::vector<std::vector<float>>& matrixB)
 {
