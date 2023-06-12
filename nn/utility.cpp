@@ -57,6 +57,7 @@ int max(int a, int b, int c, int d)
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
 =======
 //Для красного цвета
@@ -98,6 +99,8 @@ std::vector<std::vector<std::vector<int>>> getRGBMatrix(const std::string& image
 
 >>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
 
+=======
+>>>>>>> 0cc3654b896503cb0534c27d5eb400a894b81d3f
 
 
 uint32_t swap_endian(uint32_t val) {
