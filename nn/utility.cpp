@@ -1,9 +1,6 @@
 #include <vector>
 #include <cmath>
-<<<<<<< HEAD
-=======
 #include <iostream>
->>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 #include <opencv2/opencv.hpp>
 
 class matrix
@@ -59,7 +56,12 @@ int max(int a, int b, int c, int d)
     return std::max(std::max(a, b), std::max(c, d)); 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
+=======
+//Для красного цвета
+std::vector<int> red PixelsToVector(std::string& imagePath) {
+>>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
     cv::Mat image = cv::imread(imagePath);
 
     std::vector<cv::Mat> rgbMatrices;
@@ -67,7 +69,43 @@ std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
 
     return rgbMatrices;
 }
+<<<<<<< HEAD
 =======
+=======
+//Для синего цвета
+std::vector<int> bluePixelsToVector(std::string& imagePath) {
+    cv::Mat image = cv::imread(imagePath);
+
+    std::vector<int> pixelVector;
+
+
+    for (int i = 0; i < image.rows; i++) {
+        for (int j = 0; j < image.cols; j++) {
+            cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
+            int blueValue = pixel[2]; // Значение синего канала (BGR формат)
+            pixelVector.push_back(blueValue);
+        }
+    }
+
+    return pixelVector;
+}
+//Для зеленого цвета
+std::vector<int> greenPixelsToVector(std::string& imagePath) {
+    cv::Mat image = cv::imread(imagePath);
+
+    std::vector<int> pixelVector;
+
+
+    for (int i = 0; i < image.rows; i++) {
+        for (int j = 0; j < image.cols; j++) {
+            cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
+            int blueValue = pixel[1]; // Значение синего канала (BGR формат)
+            pixelVector.push_back(blueValue);
+        }
+    }
+
+    return pixelVector;
+>>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
 
 
 
@@ -114,5 +152,4 @@ void read_mnist_cv(const char* image_filename, const char* label_filename){
     }
 
     delete[] pixels;
->>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 }
