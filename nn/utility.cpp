@@ -2,6 +2,8 @@
 #include <cmath>
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <string>
+
 
 class matrix
 {
@@ -44,7 +46,6 @@ class matrix
             return ans;
         }
 
-
     private:
         int size_x, size_y;
         std::vector<std::vector<float>> data;
@@ -55,57 +56,23 @@ int max(int a, int b, int c, int d)
 {
     return std::max(std::max(a, b), std::max(c, d)); 
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-std::vector<cv::Mat> getRGBMatrices(std::string& imagePath) {
-=======
-//Для красного цвета
-std::vector<int> red PixelsToVector(std::string& imagePath) {
->>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
-    cv::Mat image = cv::imread(imagePath);
 
-    std::vector<cv::Mat> rgbMatrices;
-    cv::split(image, rgbMatrices);
 
-    return rgbMatrices;
-}
-<<<<<<< HEAD
-=======
-=======
 std::vector<std::vector<std::vector<int>>> getRGBMatrix(const std::string& imagePath) {
-    // Загрузка изображения с использованием OpenCV
     cv::Mat image = cv::imread(imagePath);
-
-    // Получение размеров изображения
     int height = image.rows;
     int width = image.cols;
-
-    // Создание трехмерной матрицы для хранения данных RGB
     std::vector<std::vector<std::vector<int>>> rgbMatrix(height, std::vector<std::vector<int>>(width, std::vector<int>(3)));
-
-    // Преобразование изображения в матрицу RGB
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
-            rgbMatrix[i][j][0] = pixel[0];  // Красный канал
-            rgbMatrix[i][j][1] = pixel[1];  // Зеленый канал
-            rgbMatrix[i][j][2] = pixel[2];  // Синий канал
+            rgbMatrix[i][j][0] = pixel[0]; 
+            rgbMatrix[i][j][1] = pixel[1];  
+            rgbMatrix[i][j][2] = pixel[2]; 
         }
     }
 
-    return rgbMatrix
-}
-
->>>>>>> 2606dc13fb7ca10885007192d0bb4bdfe0a76237
-
-=======
->>>>>>> 0cc3654b896503cb0534c27d5eb400a894b81d3f
-
-
-uint32_t swap_endian(uint32_t val) {
-    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
-    return (val << 16) | (val >> 16);
+    return rgbMatrix;
 }
 
 
@@ -138,7 +105,7 @@ void read_mnist_cv(const char* image_filename, const char* label_filename){
         image_file.read(pixels, rows * cols);
         label_file.read(&label, 1);
 
-        string sLabel = std::to_string(int(label));
+        std::string sLabel = std::to_string(int(label));
         cv::Mat image_tmp(rows,cols,CV_8UC1,pixels);
         cv::resize(image_tmp, image_tmp, cv::Size(100, 100));
         cv::imshow(sLabel, image_tmp);
