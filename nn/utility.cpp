@@ -1,9 +1,6 @@
 #include <vector>
 #include <cmath>
-<<<<<<< HEAD
-=======
 #include <iostream>
->>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 #include <opencv2/opencv.hpp>
 
 class matrix
@@ -58,7 +55,6 @@ int max(int a, int b, int c, int d)
 {
     return std::max(std::max(a, b), std::max(c, d)); 
 }
-<<<<<<< HEAD
 //Для красного цвета
 std::vector<int> red PixelsToVector(std::string& imagePath) {
     cv::Mat image = cv::imread(imagePath);
@@ -108,7 +104,6 @@ std::vector<int> greenPixelsToVector(std::string& imagePath) {
     }
 
     return pixelVector;
-=======
 
 
 
@@ -155,5 +150,4 @@ void read_mnist_cv(const char* image_filename, const char* label_filename){
     }
 
     delete[] pixels;
->>>>>>> 450fb66b99c61c64d837440f1541edc9f3d15630
 }
