@@ -47,6 +47,9 @@ class matrix
             }
             return ans;
         }
+
+        
+
         matrix operator *(matrix& other) const {
             if(is_cuda()) {
                 return matrix(multiplyMatrices(data, other.get_data()));
