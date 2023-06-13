@@ -37,7 +37,11 @@ class convolutionLayer
             }
         }
 
-
+        /**Подсчитывает ошибки для нейронов на скрытом слое.
+         * @param delta Ошибка на следующем слое.
+         * @param link_weights Веса связи между слоями.
+         * @return Вычисленные ошибки для каждого нейрона на скрытом слое.
+         */
         std::vector<double> calculate_hidden_error(std::vector<double>& delta, std::vector<double>> & link_weights) {
             std::vector<double> hidden_error(link_weights[0].size(), 0.0);
 
@@ -53,7 +57,11 @@ class convolutionLayer
         }
 };
 
-
+         /**Находит ошибку между значениями векторов.
+         * @param output_res Выходное значение нейронной сети.
+         * @param result Ожидаемое(истинное) значение.
+         * @return Ошибка.
+         */
 double calculate_error(double output_result, double result){
     return (result-output_result)*(result-output_result);
 }

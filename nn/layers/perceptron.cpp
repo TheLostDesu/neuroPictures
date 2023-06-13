@@ -31,6 +31,7 @@ class perceptronLayer
             return hidden_error;
         }
     private:
+
         void update_weights(std::vector<double>& error, std::vector<double>& gradients, double learning_rate)
         {
             int error_size = error.size();
