@@ -13,6 +13,23 @@ class perceptronLayer
             }
         }
         
+        std::vector<double> calculate_hidden_error(std::vector<double>& gradients, matrix& next_layer_weights) 
+        {
+            int input_size = weights.get_size_x();
+            int output_size = gradients.size();
+            std::vector<double> hidden_error(input_size);
+            for (int i = 0; i < input_size; ++i) 
+            {
+                double error = 0.0;
+                for (int j = 0; j < output_size; ++j) 
+                {
+                    error += gradients[j] * next_layer_weights.get(i, j);
+                }
+                hidden_error[i] = error;
+            }
+
+            return hidden_error;
+        }
     private:
         void update_weights(std::vector<double>& error, std::vector<double>& gradients, double learning_rate)
         {
@@ -28,29 +45,9 @@ class perceptronLayer
             }
         }
 
-
         matrix weights;
 };
 
 
 
 
-std::vector<double> calculate_hidden_error(std::vector<double>& gradients, matrix& next_layer_weights) 
-{
-    int input_size = weights.size();
-    int output_size = gradients.size();
-
-    vector<double> hidden_error(input_size);
-
-    for (int i = 0; i < input_size; ++i) 
-    {
-        double error = 0.0;
-        for (int j = 0; j < output_size; ++j) 
-        {
-            error += gradients[j] * next_layer_weights[i][j];
-        }
-        hidden_error[i] = error;
-    }
-
-    return hidden_error;
-}
