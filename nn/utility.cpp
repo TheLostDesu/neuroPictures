@@ -78,7 +78,10 @@ class matrix
         int size_x, size_y;
         std::vector<std::vector<float>> data;
 };
-
+/**Подсчитывает градиент.
+         * @param values выходные значения нейронов.
+         * @return градиент.
+         */
 std::vector<int> calculate_gradient(std::vector<int> values){
     std::vector<int> gradients(values.size());
     for (int i = 0; i < values.size(); ++i){
@@ -93,7 +96,13 @@ std::vector<int> calculate_gradient(std::vector<int> values){
     }
     return gradients;
 }
-
+/**Находит максимальное число.
+         * @param a первое число.
+         * @param b второе число.
+         * @param c третье число.
+         * @param d четвертое число.
+         * @return максимальное число.
+         */
 int max(int a, int b, int c, int d) 
 {
     return std::max(std::max(a, b), std::max(c, d)); 
@@ -112,7 +121,9 @@ matrix conv_to_perc(std::vector<matrix> conv_out) {
     }
     return matrix(ans);
 }
-
+/**Разбивает изображение на три матрицы R, G, B и возвращает их в виде вектора.
+         * @param imagePath Путь к изображению.
+         */
 std::vector<matrix> getrgbmatrix(const std::string& imagePath) {
     cv::Mat image = cv::imread(imagePath);
     int height = image.rows;
