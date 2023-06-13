@@ -63,8 +63,8 @@ class matrix
             }
         }
         void relu(){
-            for (i = 0; i < size_x(); ++i){
-                for (j = 0; j < size_y(); ++j){
+            for (int i = 0; i < size_x; ++i){
+                for (int j = 0; j < size_y; ++j){
                     if (data[i][j] < 0){
                         data[i][j] = 0;
                     }
@@ -72,24 +72,27 @@ class matrix
             }
         }
 
-        void calculate_gradient(){
-            for (i = 0; i < size_x(); ++i){
-                for (j = 0; j < size_y(); ++j){
-                    if (data[i][j] > 0){
-                        data[i][j] = 1;
-                    }
-                    else{
-                        data[i][j] = 0;
-                }
-            }
-        }
-        }
+
 
     private:
         int size_x, size_y;
         std::vector<std::vector<float>> data;
 };
 
+std::vector<int> calculate_gradient(std::vector<int> values){
+    std::vector<int> gradients(values.size());
+    for (int i = 0; i < values.size(); ++i){
+        if(values[i] > 0) 
+        {
+            gradients[i] = 1;
+        }
+        else 
+        {
+            gradients[i] = 0;
+        }
+    }
+    return gradients;
+}
 
 int max(int a, int b, int c, int d) 
 {
@@ -116,4 +119,3 @@ std::vector<matrix> getRGBMatrix(const std::string& imagePath) {
 
     return rgbMatrix;
 }
-
