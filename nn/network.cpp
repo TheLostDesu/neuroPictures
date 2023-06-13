@@ -2,6 +2,7 @@
 #include "nn/layers/convolution.cpp"
 #include "nn/layers/perceptron.cpp"
 #include "nn/layers/pooling.cpp"
+#include "nn/utility.cpp"
 
 class CNN 
 {
@@ -18,7 +19,22 @@ class CNN
         int recognize() {
             
         }
-        void learn() {
+        void learn(std::vector<matrix> rgb, int ans) {
+
+            std::vector<float> target_output(10, 0);
+            target_output[ans] = 1;
+
+            std::vector <std::vector<matrix>> ins_conv;
+            std::vector <matrix> ins_perc;
+            ins_conv.push_back(rgb);
+
+            for(int i = 0; i < conv.size(); ++i) {
+                ins_conv.push_back(pool[i].max_pool(conv[i].convolve(ins_conv[i])));
+            }
+            ins_perc.push_back(conv_to_perc(ins_conv));
+            
+
+
             std::vector<double> error = calculate_error(output, target_output);
             error = hidden_error;
             double learning_rate = float m;
@@ -44,10 +60,6 @@ class CNN
                 std::vector<double> hidden_error = layer.calculate_hidden_error(error);
 
             }
-
-
-    matrix weights;
-};
         }
 
         
