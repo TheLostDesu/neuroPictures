@@ -3,7 +3,7 @@ project(neuroPictures)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(OpenCV_DIR "${VCPKG_INSTALLED_DIR}/vcpkg/installed/x86-windows/share/opencv2")
+set(OpenCV_DIR "${VCPKG_INSTALLED_DIR}/include/vcpkg/installed/x86-windows/share/opencv2")
 find_package(OpenCV REQUIRED)
 
 
