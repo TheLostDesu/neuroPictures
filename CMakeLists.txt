@@ -3,9 +3,8 @@ project(neuroPictures)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_PREFIX_PATH "/include/opencv2")
-
-find_package(OpenCV CONFIG REQUIRED)
+set(OpenCV_DIR "${VCPKG_INSTALLED_DIR}/vcpkg/installed/x86-windows/share/opencv2")
+find_package(OpenCV REQUIRED)
 
 
 add_executable(
