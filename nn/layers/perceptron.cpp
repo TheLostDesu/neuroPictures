@@ -14,16 +14,16 @@ class perceptronLayer
         }
         
     private:
-        void update_weights(std::vector<double>& input, std::vector<double>& gradients, double learning_rate)
+        void update_weights(std::vector<double>& error, std::vector<double>& gradients, double learning_rate)
         {
-            int input_size = input.size();
+            int error_size = error.size();
             int gradients_size = gradients.size();
 
-            for (int i = 0; i < input_size; ++i)
+            for (int i = 0; i < error_size; ++i)
             {
                 for (int j = 0; j < gradients_size; ++j)
                 {
-                    weights.add(i, j, learning_rate * input[i] * gradients[i]);
+                    weights.add(i, j, learning_rate * error_size[i] * gradients[i]);
                 }
             }
         }
