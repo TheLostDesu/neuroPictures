@@ -69,16 +69,16 @@ class CNN
 
         
     private:
-<<<<<<< HEAD
+
         /**Находит ошибку между значениями векторов.
          * @param output_res Выходное значение нейронной сети.
          * @param result Ожидаемое(истинное) значение.
          * @return Ошибка.
          */
         std::vector<double> calculate_error(std::vector<double>& output_res, std::vector<double>& result)
-=======
+
         std::vector<float> calculate_error(std::vector<float>& output_res, std::vector<float>& result)
->>>>>>> da06e615cbc98e177dbee4c97da68a749e3824f9
+
         {
             int result_size = result.size();
             std::vector<float> error(result_size);

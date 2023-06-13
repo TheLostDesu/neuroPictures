@@ -81,7 +81,7 @@ class matrix
         int size_x, size_y;
         std::vector<std::vector<float>> data;
 };
-/**Подсчитывает градиент.
+        /**Подсчитывает градиент.
          * @param values выходные значения нейронов.
          * @return градиент.
          */
