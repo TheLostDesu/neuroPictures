@@ -23,17 +23,19 @@ class convolutionLayer
         std::vector<matrix> convolutionMatrixes;
 
 
-        void update_weights(std::vector<double>& link_weights, std::vector<double>& delta, double learning_rate, std::vector<double>& activations)
+        void update_weights(std::vector<double>& link_weights, std::vector<double>& error, double learning_rate, std::vector<double>& activations)
         {
-            for (size_t i = 0; i < link_weights.size(); ++i)
+            int link_weights_size = link_weights.size();
+            int gradients_size = gradients.size();
+
+            for (int i = 0; i < link_weights_size; ++i)
             {
-                for (size_t j = 0; j < link_weights[0].size(); ++j)
+                for (int j = 0; j < gradients_size; ++j)
                 {
-                    weight[i][j] += learning_rate * delta[i] * activations[i];
+                    weights.add(i, j, learning_rate * delta[i] * activations[i]);
                 }
             }
         }
-
 
 
         std::vector<double> calculate_hidden_error(std::vector<double>& delta, std::vector<double>> & link_weights) {
