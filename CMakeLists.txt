@@ -10,4 +10,5 @@ find_package(OpenCV REQUIRED)
 add_executable(
         editor.cpp
         interface.cpp
-        interface.h)
+        interface.h
+        tests.cpp)
