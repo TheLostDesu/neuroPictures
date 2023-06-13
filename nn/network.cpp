@@ -31,11 +31,16 @@ class CNN
             for(int i = 0; i < conv.size(); ++i) {
                 ins_conv.push_back(pool[i].max_pool(conv[i].convolve(ins_conv[i])));
             }
-            ins_perc.push_back(conv_to_perc(ins_conv));
-            
+            ins_perc.push_back(conv_to_perc(ins_conv[conv.size()]));
+            for(int i = 0; i < prc.size(); ++i) {
+                ins_perc.push_back(prc[i].predict(ins_perc[i]));
+            }
+            std::vector<int> out(10);
+            for(int i = 0; i < 10; ++i) {
+                out[i] = ins_perc[i].get(0, i);
+            }
 
-
-            std::vector<double> error = calculate_error(output, target_output);
+            std::vector<double> error = calculate_error(ins_perc[prc.size()], target_output);
             error = hidden_error;
             double learning_rate = float m;
             update_weight(error, gradients, learning_rate)
@@ -64,10 +69,10 @@ class CNN
 
         
     private:
-        std::vector<double> calculate_error(std::vector<double>& output_res, std::vector<double>& result)
+        std::vector<float> calculate_error(std::vector<float>& output_res, std::vector<float>& result)
         {
             int result_size = result.size();
-            std::vector<double> error(result_size);
+            std::vector<float> error(result_size);
 
             for (int i = 0; i < result_size; ++i)
             {
