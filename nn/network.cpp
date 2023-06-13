@@ -19,7 +19,35 @@ class CNN
             
         }
         void learn() {
+            std::vector<double> error = calculate_error(output, target_output);
+            error = hidden_error;
+            double learning_rate = float m;
+            update_weight(error, gradients, learning_rate)
 
+            for (size_t i = 0; i < perceptron_layers.size(); ++i)
+            {
+                Perceptron& layer = perceptron_layers[i];
+
+                std::vector<double> output = layer.predict(matrix layer_in);
+
+                std::vector<double> hidden_error = layer.calculate_hidden_error(error);
+
+            }
+
+
+            for (size_t i = 0; i < convolution_layers.size(); ++i)
+            {
+                Convolution& layer = convolution_layers[i];
+
+                std::vector<double> output = layer.convolve(layerIn);
+
+                std::vector<double> hidden_error = layer.calculate_hidden_error(error);
+
+            }
+
+
+    matrix weights;
+};
         }
 
         
