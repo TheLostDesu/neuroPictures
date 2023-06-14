@@ -1,5 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "utility.cpp"
+#include "nn/utility.cpp"
 #include "doctest.h"
 
 TEST_CASE("Умножение матриц") {
