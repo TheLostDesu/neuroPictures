@@ -1,4 +1,4 @@
-#include "nn/utility.cpp"
+#include "../utility.cpp"
 #include <vector>
 
 class perceptronLayer 

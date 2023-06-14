@@ -1,5 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "nn/utility.cpp"
+#include "../nn/utility.cpp"
 #include "doctest.h"
 #include <vector>
 
