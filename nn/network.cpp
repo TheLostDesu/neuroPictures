@@ -16,10 +16,27 @@ class CNN
 
         }
         
-        int recognize() {
-            
+        int recognize(std::vector<matrix> rgb) {
+            std::vector<matrix> now = rgb;
+            for(int i = 0; i < conv.size(); ++i) {
+                now = pool[i].max_pool(conv[i].convolve(now));
+            }
+            matrix nw = conv_to_perc(now);
+            for(int i = 0; i < prc.size(); ++i) {
+                nw = prc[i].predict(nw);
+            }
+            int ans = 0;
+            for(int i = 0; i < 10; ++i) 
+            {
+                if(nw.get(0, i) > nw.get(0, ans)) 
+                {
+                    ans = i;
+                }
+            }
+            return ans;
         }
-        void learn(std::vector<matrix> rgb, int ans) {
+
+        void learn(std::vector<matrix> rgb, int ans, float learning_rate) {
 
             std::vector<float> target_output(10, 0);
             target_output[ans] = 1;
@@ -35,23 +52,17 @@ class CNN
             for(int i = 0; i < prc.size(); ++i) {
                 ins_perc.push_back(prc[i].predict(ins_perc[i]));
             }
-            std::vector<int> out(10);
+            std::vector<float> out(10);
             for(int i = 0; i < 10; ++i) {
                 out[i] = ins_perc[i].get(0, i);
             }
 
-            std::vector<double> error = calculate_error(ins_perc[prc.size()], target_output);
-            error = hidden_error;
-            double learning_rate = float m;
-            update_weight(error, gradients, learning_rate)
-
-            for (size_t i = 0; i < perceptron_layers.size(); ++i)
+            std::vector<float> error = calculate_error(out, target_output);
+            
+            for (size_t i = 0; i < prc.size(); ++i)
             {
-                Perceptron& layer = perceptron_layers[i];
-
-                std::vector<double> output = layer.predict(matrix layer_in);
-
-                std::vector<double> hidden_error = layer.calculate_hidden_error(error);
+                std::vector<double> output = prc[i].predict(ins_perc[i]);
+                error = prc[i].calculate_hidden_error(error);
 
             }
 
@@ -75,8 +86,6 @@ class CNN
          * @param result Ожидаемое(истинное) значение.
          * @return Ошибка.
          */
-        std::vector<double> calculate_error(std::vector<double>& output_res, std::vector<double>& result)
-
         std::vector<float> calculate_error(std::vector<float>& output_res, std::vector<float>& result)
 
         {

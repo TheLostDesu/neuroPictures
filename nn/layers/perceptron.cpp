@@ -12,15 +12,15 @@ class perceptronLayer
                 return weights * layer_in; 
             }
         }
-        
-        std::vector<double> calculate_hidden_error(std::vector<double>& gradients, matrix& next_layer_weights) 
+
+        std::vector<float> calculate_hidden_error(std::vector<float>& gradients, matrix& next_layer_weights) 
         {
             int input_size = weights.get_size_x();
             int output_size = gradients.size();
-            std::vector<double> hidden_error(input_size);
+            std::vector<float> hidden_error(input_size);
             for (int i = 0; i < input_size; ++i) 
             {
-                double error = 0.0;
+                float error = 0.0;
                 for (int j = 0; j < output_size; ++j) 
                 {
                     error += gradients[j] * next_layer_weights.get(i, j);
@@ -30,9 +30,7 @@ class perceptronLayer
 
             return hidden_error;
         }
-    private:
-
-        void update_weights(std::vector<double>& error, std::vector<double>& gradients, double learning_rate)
+        void update_weights(std::vector<float>& error, std::vector<float>& gradients, float learning_rate)
         {
             int error_size = error.size();
             int gradients_size = gradients.size();
@@ -41,14 +39,10 @@ class perceptronLayer
             {
                 for (int j = 0; j < gradients_size; ++j)
                 {
-                    weights.add(i, j, learning_rate * error_size[i] * gradients[i]);
+                    weights.add(i, j, learning_rate * error[i] * gradients[i]);
                 }
             }
         }
-
+    private:
         matrix weights;
 };
-
-
-
-
