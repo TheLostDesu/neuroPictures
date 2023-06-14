@@ -61,20 +61,15 @@ class CNN
             
             for (size_t i = 0; i < prc.size(); ++i)
             {
-                std::vector<double> output = prc[i].predict(ins_perc[i]);
+                std::vector<double> output = ins_perc[i + 1];
                 error = prc[i].calculate_hidden_error(error);
 
             }
 
-
-            for (size_t i = 0; i < convolution_layers.size(); ++i)
+            for (size_t i = 0; i < conv.size(); ++i)
             {
-                Convolution& layer = convolution_layers[i];
-
-                std::vector<double> output = layer.convolve(layerIn);
-
-                std::vector<double> hidden_error = layer.calculate_hidden_error(error);
-
+                std::vector<double> output = ins_conv[i + 1];
+                std::vector<double> hidden_error = conv[i].calculate_hidden_error(error);
             }
         }
 
