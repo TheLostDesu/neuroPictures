@@ -1,34 +1,44 @@
 #include <vector>
-#include "layers/convolution.cpp"
-#include "layers/perceptron.cpp"
-#include "layers/pooling.cpp"
+#include "perceptron.cpp"
 #include "utility.cpp"
+
+
+/**Находит ошибку между значениями векторов.
+* @param output_res Выходное значение нейронной сети.
+* @param result Ожидаемое(истинное) значение.
+* @return Ошибка.
+*/
+matrix calculate_error(matrix output_res, matrix result)
+{
+    matrix err({});
+    err.set_size(0, output_res.get_size_y());
+    for (int i = 0; i < result.get_size_x(); ++i)
+    {
+        err.set(0, i, (result.get(0, i) - output_res.get(0, i)) * (result.get(0, i) - output_res.get(0, i)));
+    }
+    return err;
+}
 
 class CNN 
 {
     public:
-        CNN(int numberOfLayersC_, int numberOfLayersP_, std::vector<std::pair<int, int>> convolution_params, std::vector<int> pooling_params) {
-            numberOfLayersC = numberOfLayersC_;
-            numberOfLayersP = numberOfLayersP_;
-            prc.resize(numberOfLayersP);
-            conv.resize(numberOfLayersC);
-            pool.resize(numberOfLayersC);
-
+        CNN(int numberOfLayersC_, int numberOfLayersP_, std::vector<int> p_sizes) {
+            number_of_layers_prc = numberOfLayersP_;
+            prc.resize(number_of_layers_prc);
+            for(int i = 0; i < number_of_layers_prc; ++i) {
+                prc[i].set_size(p_sizes[i]);
+            }
         }
         
-        int recognize(std::vector<matrix> rgb) {
-            std::vector<matrix> now = rgb;
-            for(int i = 0; i < conv.size(); ++i) {
-                now = pool[i].max_pool(conv[i].convolve(now));
-            }
-            matrix nw = conv_to_perc(now);
+        int recognize(matrix rgb) {
+            matrix now = rgb;
             for(int i = 0; i < prc.size(); ++i) {
-                nw = prc[i].predict(nw);
+                now = prc[i].predict(now);
             }
             int ans = 0;
             for(int i = 0; i < 10; ++i) 
             {
-                if(nw.get(0, i) > nw.get(0, ans)) 
+                if(now.get(0, i) > now.get(0, ans)) 
                 {
                     ans = i;
                 }
@@ -36,18 +46,12 @@ class CNN
             return ans;
         }
 
-        void learn(std::vector<matrix> rgb, int ans, float learning_rate) {
 
+        void learn(std::vector<matrix> rgb, int ans, float learning_rate) {
             std::vector<float> target_output(10, 0);
             target_output[ans] = 1;
 
-            std::vector <std::vector<matrix>> ins_conv;
             std::vector <matrix> ins_perc;
-            ins_conv.push_back(rgb);
-
-            for(int i = 0; i < conv.size(); ++i) {
-                ins_conv.push_back(pool[i].max_pool(conv[i].convolve(ins_conv[i])));
-            }
             ins_perc.push_back(conv_to_perc(ins_conv[conv.size()]));
             for(int i = 0; i < prc.size(); ++i) {
                 ins_perc.push_back(prc[i].predict(ins_perc[i]));
@@ -75,27 +79,7 @@ class CNN
 
         
     private:
-
-        /**Находит ошибку между значениями векторов.
-         * @param output_res Выходное значение нейронной сети.
-         * @param result Ожидаемое(истинное) значение.
-         * @return Ошибка.
-         */
-        std::vector<float> calculate_error(std::vector<float>& output_res, std::vector<float>& result)
-
-        {
-            int result_size = result.size();
-            std::vector<float> error(result_size);
-
-            for (int i = 0; i < result_size; ++i)
-            {
-                error[i] = result[i] - output_res[i];
-            }
-            return error;
-        }
-
-        int numberOfLayersC, numberOfLayersP;
+        int number_of_layers_prc;
+        int learning_rate;
         std::vector<perceptronLayer> prc;
-        std::vector<convolutionLayer> conv;
-        std::vector<poolingLayer> pool;
 };
