@@ -2,8 +2,10 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <opencv2/opencv.hpp>
 #include "../GPU_stuff/matrix_mul.cpp"
 #include "../GPU_stuff/detect_device.cpp"
+
 
 /**Класс матрицы.
 * size_x - размер матрицы по x
@@ -21,6 +23,9 @@ class matrix
             size_y = data[0].size();
         }
 
+        void convert(cv::Mat image) {
+
+        }
         
         /**геттер размера
         * @return size_x размер матрицы по x
@@ -67,22 +72,12 @@ class matrix
         /** сеттер размера.
         *  @param x - размер по x 
         *  @param y - размер по y
+        *  ВНИМАНИЕ: Удаляет исходную матрицу
         */
-        void set_size(int x, int y) {
-            data.resize(x, std::vector<float>(y));
+        void set_size(int x, int y, int value=0) {
+            data.assign(x, std::vector<float>(y, value));
         }
 
-        /** прогон матрицы через функцию активации relu
-        */
-        void relu(){
-            for (int i = 0; i < size_x; ++i){
-                for (int j = 0; j < size_y; ++j){
-                    if (data[i][j] < 0){
-                        data[i][j] = 0;
-                    }
-                }
-            }
-        }
         bool operator ==(matrix &other) const {
             if(size_x != other.get_size_x() || size_y != other.get_size_y()) {
                 return false;
@@ -183,6 +178,3 @@ matrix conv_to_perc(std::vector<matrix> conv_out) {
     }
     return matrix(ans);
 }
-
-
-
