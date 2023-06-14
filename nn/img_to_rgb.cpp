@@ -1,5 +1,5 @@
 #include <opencv2/opencv.hpp>
-#include "nn/utility.cpp"
+#include "utility.cpp"
 
 /**Разбивает изображение на три матрицы R, G, B и возвращает их в виде вектора.
          * @param imagePath Путь к изображению.

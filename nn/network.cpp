@@ -1,8 +1,8 @@
 #include <vector>
-#include "nn/layers/convolution.cpp"
-#include "nn/layers/perceptron.cpp"
-#include "nn/layers/pooling.cpp"
-#include "nn/utility.cpp"
+#include "layers/convolution.cpp"
+#include "layers/perceptron.cpp"
+#include "layers/pooling.cpp"
+#include "utility.cpp"
 
 class CNN 
 {
