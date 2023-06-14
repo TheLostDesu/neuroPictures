@@ -13,7 +13,8 @@ class perceptronLayer
             }
         }
 
-        std::vector<float> calculate_hidden_error(std::vector<float>& gradients, matrix& next_layer_weights) 
+        std::vector<float> calculate_hidden_error(std::vector<float>& error,
+                                                  std::vector<float>& gradients, matrix& next_layer_weights)
         {
             int input_size = weights.get_size_x();
             int output_size = gradients.size();
