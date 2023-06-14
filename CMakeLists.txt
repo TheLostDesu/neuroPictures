@@ -4,10 +4,13 @@ project(neuroPictures)
 set(CMAKE_CXX_STANDARD 17)
 
 
-include_directories(/include)
-include_directories(/include/cuda/lib)
-include_directories(/include/cuda/include)
-include_directories(/lib)
+list(APPEND CMAKE_PREFIX_PATH ./include/opencv2/)
+find_package(OpenCV REQUIRED)
+
+include_directories(./include)
+include_directories(./include/cuda/lib)
+include_directories(./include/cuda/include)
+include_directories(./lib)
 
 add_library(utility STATIC nn/utility.cpp)
 add_library(gpu1 STATIC GPU_stuff/matrix_mul.cpp)
