@@ -26,6 +26,13 @@ class perceptronLayer
                 }
             }
         }
+
+        void set_values(matrix values) 
+        {
+            in = values.get_size_x();
+            out = values.get_size_y();
+            weights = values;
+        }
         
         matrix predict(matrix data) 
         {
@@ -68,6 +75,14 @@ class perceptronLayer
         }
         matrix get_weights() {
             return weights;
+        }
+        int get_size_x() 
+        {
+            return weights.get_size_x();
+        }
+        int get_size_y() 
+        {
+            return weights.get_size_y();
         }
 
     private:

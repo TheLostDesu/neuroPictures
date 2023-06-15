@@ -1,4 +1,6 @@
 #include <vector>
+#include <fstream>
+#include <string>
 #include "perceptron.cpp"
 #include "utility.cpp"
 
@@ -74,8 +76,48 @@ class NN
                 prc[i].update_weights(err, 0.1);
                 err = prc[i].calculate_hidden_error(err, prc[i].get_weights());
             }
+        }  
+
+        int get_size() 
+        {
+            return number_of_layers_prc;
         }
 
+        std::vector<std::vector<float>> ready_to_print_layer(int index) 
+        {
+            std::vector<std::vector<float>> ans(prc[index].get_size_x(), std::vector<float>(prc[index].get_size_y()));
+            matrix weights = prc[index].get_weights();
+            for(int i = 0; i < prc[index].get_size_x(); ++i) {
+                for(int j = 0; j < prc[index].get_size_y(); ++j) {
+                    ans[i][j] = weights.get(i, j);
+                }
+            }
+            return ans;
+        }
+
+        void load(std::string filename) 
+        {
+            std::ifstream in;
+            in.open(filename);
+            int size;
+            in >> size;
+            prc.resize(size);
+            for(int i = 0; i < size; ++i) {
+                float size_x, size_y, value;
+                in >> size_x >> size_y;
+                matrix layer({});
+                layer.set_size(size_x, size_y);
+                for(int x = 0; x < size_x; ++x) 
+                {
+                    for(int y = 0; y < size_y; ++y) 
+                    {
+                        in >> value;
+                        layer.set(x, y, size_x);
+                    }
+                }
+                prc[i].set_values(layer);
+            }
+        }
         
     private:
         int number_of_layers_prc;
@@ -84,6 +126,25 @@ class NN
 };
 
 
-void save_NN() {
+void save_NN(NN to_save, std::string filename) 
+{
+    std::ofstream out;
+    out.open(filename);
+    int size = to_save.get_size();
+    out << size;
     
+    for(int i = 0; i < size; ++i) 
+    {
+        std::vector<std::vector<float>> weights = to_save.ready_to_print_layer(i);
+        out << weights.size() << ' ' << weights[0].size();
+        for(int i = 0; i < weights.size(); ++i) 
+        {
+            for(int j = 0; j < weights[i].size(); ++j) 
+            {
+                out << weights[i][j] << ' ';
+            }
+            out << '\n';
+        }
+        out.close();
+    }
 }
