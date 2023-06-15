@@ -129,25 +129,6 @@ class matrix
         std::vector<std::vector<float>> data;
 };
 
-/**Подсчитывает градиент.
-* @param values выходные значения нейронов.
-* @return градиент.
-*/
-std::vector<int> calculate_gradient(std::vector<int> values){
-    std::vector<int> gradients(values.size());
-    for (int i = 0; i < values.size(); ++i){
-        if(values[i] > 0) 
-        {
-            gradients[i] = 1;
-        }
-        else 
-        {
-            gradients[i] = 0;
-        }
-    }
-    return gradients;
-}
-
 /**Находит максимальное число.
          * @param a первое число.
          * @param b второе число.

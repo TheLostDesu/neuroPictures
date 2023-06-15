@@ -19,20 +19,31 @@ matrix calculate_error(matrix output_res, matrix result)
     return err;
 }
 
-class CNN 
+class NN 
 {
     public:
-        CNN(int numberOfLayersC_, int numberOfLayersP_, std::vector<int> p_sizes) {
+        NN(int numberOfLayersC_, int numberOfLayersP_, std::vector<int> p_sizes, int first_in) 
+        {
             number_of_layers_prc = numberOfLayersP_;
             prc.resize(number_of_layers_prc);
-            for(int i = 0; i < number_of_layers_prc; ++i) {
-                prc[i].set_size(p_sizes[i]);
+            for(int i = 0; i < number_of_layers_prc; ++i) 
+            {
+                if(i != 0) 
+                {
+                    prc[i].set(p_sizes[i - 1], p_sizes[i]);
+                }
+                else
+                {
+                    prc[i].set(first_in, p_sizes[i]);
+                }
             }
         }
         
-        int recognize(matrix rgb) {
+        int recognize(matrix rgb) 
+        {
             matrix now = rgb;
-            for(int i = 0; i < prc.size(); ++i) {
+            for(int i = 0; i < prc.size(); ++i) 
+            {
                 now = prc[i].predict(now);
             }
             int ans = 0;
@@ -47,33 +58,21 @@ class CNN
         }
 
 
-        void learn(std::vector<matrix> rgb, int ans, float learning_rate) {
-            std::vector<float> target_output(10, 0);
-            target_output[ans] = 1;
+        void learn(matrix rgb, int ans, float learning_rate) {
+            matrix target_output({});
+            target_output.set_size(1, 10);
+            target_output.set(0, ans, 1);
 
-            std::vector <matrix> ins_perc;
-            ins_perc.push_back(conv_to_perc(ins_conv[conv.size()]));
+            matrix in = rgb;
             for(int i = 0; i < prc.size(); ++i) {
-                ins_perc.push_back(prc[i].predict(ins_perc[i]));
+                in = prc[i].predict(in);
             }
-            std::vector<float> out(10);
-            for(int i = 0; i < 10; ++i) {
-                out[i] = ins_perc[i].get(0, i);
-            }
+            matrix err = calculate_error(in, target_output);
 
-            std::vector<float> error = calculate_error(out, target_output);
-            
             for (size_t i = 0; i < prc.size(); ++i)
             {
-                std::vector<double> output = ins_perc[i + 1];
-                error = prc[i].calculate_hidden_error(error);
-
-            }
-
-            for (size_t i = 0; i < conv.size(); ++i)
-            {
-                std::vector<double> output = ins_conv[i + 1];
-                std::vector<double> hidden_error = conv[i].calculate_hidden_error(error);
+                prc[i].update_weights(err, 0.1);
+                err = prc[i].calculate_hidden_error(err, prc[i].get_weights());
             }
         }
 
@@ -83,3 +82,8 @@ class CNN
         int learning_rate;
         std::vector<perceptronLayer> prc;
 };
+
+
+void save_NN() {
+    
+}
