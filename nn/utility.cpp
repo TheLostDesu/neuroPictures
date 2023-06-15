@@ -149,7 +149,6 @@ int max(int a, int b, int c, int d)
 */
 matrix conv_to_perc(std::vector<matrix> conv_out) {
     std::vector<std::vector<float>> ans(0);
-
     for(int i = 0; i < conv_out.size(); ++i) {
         for(int j = 0; j < conv_out[i].get_size_x(); ++j) {
             for(int k = 0; k < conv_out[i].get_size_y(); ++k) {
