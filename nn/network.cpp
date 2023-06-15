@@ -3,7 +3,7 @@
 #include <string>
 #include "perceptron.cpp"
 #include "utility.cpp"
-
+#pragma once
 
 /**Находит ошибку между значениями векторов.
 * @param output_res Выходное значение нейронной сети.
@@ -12,9 +12,9 @@
 */
 matrix calculate_error(matrix output_res, matrix result)
 {
-    matrix err({});
-    err.set_size(0, output_res.get_size_y());
-    for (int i = 0; i < result.get_size_x(); ++i)
+    matrix err;
+    err.set_size(1, output_res.get_size_y());
+    for (int i = 0; i < result.get_size_y(); ++i)
     {
         err.set(0, i, (result.get(0, i) - output_res.get(0, i)) * (result.get(0, i) - output_res.get(0, i)));
     }
@@ -24,7 +24,7 @@ matrix calculate_error(matrix output_res, matrix result)
 class NN 
 {
     public:
-        NN(int numberOfLayersC_, int numberOfLayersP_, std::vector<int> p_sizes, int first_in) 
+        NN(int numberOfLayersP_, std::vector<int> p_sizes, int first_in) 
         {
             number_of_layers_prc = numberOfLayersP_;
             prc.resize(number_of_layers_prc);
@@ -61,9 +61,10 @@ class NN
 
 
         void learn(matrix rgb, int ans, float learning_rate) {
-            matrix target_output({});
+            matrix target_output;
             target_output.set_size(1, 10);
             target_output.set(0, ans, 1);
+
 
             matrix in = rgb;
             for(int i = 0; i < prc.size(); ++i) {
@@ -71,10 +72,12 @@ class NN
             }
             matrix err = calculate_error(in, target_output);
 
-            for (size_t i = 0; i < prc.size(); ++i)
+
+
+            for (size_t i = prc.size() - 1; i > 0; --i)
             {
                 prc[i].update_weights(err, 0.1);
-                err = prc[i].calculate_hidden_error(err, prc[i].get_weights());
+                err = prc[i].calculate_hidden_error(err, prc[i - 1].get_weights());
             }
         }  
 
@@ -105,7 +108,7 @@ class NN
             for(int i = 0; i < size; ++i) {
                 float size_x, size_y, value;
                 in >> size_x >> size_y;
-                matrix layer({});
+                matrix layer;
                 layer.set_size(size_x, size_y);
                 for(int x = 0; x < size_x; ++x) 
                 {

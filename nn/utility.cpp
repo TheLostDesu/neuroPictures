@@ -2,10 +2,10 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include <opencv2/opencv.hpp>
-#include "../GPU_stuff/matrix_mul.cpp"
-#include "../GPU_stuff/detect_device.cpp"
-
+#pragma once
+//#include <opencv2/opencv.hpp>
+//#include "../GPU_stuff/matrix_mul.cpp"
+//#include "../GPU_stuff/detect_device.cpp"
 
 /**Класс матрицы.
 * size_x - размер матрицы по x
@@ -17,14 +17,25 @@ class matrix
 {
 
     public:
-        matrix(std::vector<std::vector<float>> data_) {
+        matrix() 
+        {
+            data = std::vector<std::vector<float>>(0);
+            size_x = 0;
+            size_y = 0; 
+        }
+        
+        matrix(std::vector<std::vector<float>> data_) 
+        {
             data = data_;
             size_x = data.size();
-            size_y = data[0].size();
-        }
-
-        void convert(cv::Mat image) {
-
+            if(size_x == 0) 
+            {
+                size_y = 0;
+            }
+            else
+            {
+                size_y = data[0].size();
+            }
         }
         
         /**геттер размера
@@ -75,7 +86,13 @@ class matrix
         *  ВНИМАНИЕ: Удаляет исходную матрицу
         */
         void set_size(int x, int y, int value=0) {
-            data.assign(x, std::vector<float>(y, value));
+            data.resize(x);
+            for(int i = 0; i < x; ++i)
+            {
+                data[i].resize(y, value);
+            }
+            size_x = x;
+            size_y = y;
         }
 
         bool operator ==(matrix &other) const {
@@ -107,20 +124,22 @@ class matrix
         }
         
 
-        matrix operator *(matrix& other) const {
-            if(is_cuda()) {
+        matrix operator *(matrix& other) const 
+        {
+            /*if(is_cuda()) {
                 return matrix(multiplyMatrices(data, other.get_data()));
-            }
-            else {
-                std::vector<std::vector<float>> ans; 
+            }*/
+            //else {
+                std::vector<std::vector<float>> ans(size_x, std::vector<float>(other.get_size_y())); 
                 for(int i = 0; i < size_x; ++i) {
                     for(int j = 0; j < size_y; ++j) {
-                        for(int k = 0; k < size_y; ++k) {
+                        for(int k = 0; k < other.get_size_y(); ++k) {
                             ans[i][k] += data[i][j] * other.get(j, k);
                         }
                     }
                 }
-            }
+                return matrix(ans);
+            //}
         }
 
 

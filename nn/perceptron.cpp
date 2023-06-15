@@ -1,6 +1,7 @@
 #include "utility.cpp"
 #include <vector>
 #include <random>
+#pragma once
 
 float calculate_grad(float x) 
 {
@@ -14,7 +15,15 @@ float activation_funct(float x)
 
 class perceptronLayer 
 {
-    public:
+    public:    
+        perceptronLayer() 
+        {
+            weights = matrix(std::vector<std::vector<float>>(0));
+
+            ans = matrix(std::vector<std::vector<float>>(0));
+            in = 0;
+            out = 0;
+        }
         void set(int in_, int out_) 
         {
             in = in_;
@@ -37,20 +46,18 @@ class perceptronLayer
         matrix predict(matrix data) 
         {
             ans = data * weights;
-            for(int i = 0; i < in; ++i) {
-                for(int j = 0; j < out; ++j) {
-                    ans.set(i, j, activation_funct(ans.get(i, j)));
-                }
+            for(int j = 0; j < out; ++j) {
+                ans.set(0, j, activation_funct(ans.get(0, j)));
             }
             return ans;
         }
 
         matrix calculate_hidden_error(matrix error, matrix pweights)
         {
-            matrix hidden_error({});
-            hidden_error.set_size(0, in);
+            matrix hidden_error;
+            hidden_error.set_size(1, in);
             for (int i = 0; i < in; ++i) 
-            {
+            {   
                 float err = 0.0;
                 for (int j = 0; j < out; ++j) 
                 {
