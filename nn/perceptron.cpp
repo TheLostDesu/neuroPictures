@@ -2,12 +2,12 @@
 #include <vector>
 #include <random>
 
-float activation_funct(float x) 
+float calculate_grad(float x) 
 {
     return x * (1 - x);
 }
 
-float calculate_gradient(float x) 
+float activation_funct(float x) 
 {
     return (1.0 / (1.0 + exp(-x)));
 }
@@ -29,7 +29,7 @@ class perceptronLayer
         
         matrix predict(matrix data) 
         {
-            matrix ans = data * weights;
+            ans = data * weights;
             for(int i = 0; i < in; ++i) {
                 for(int j = 0; j < out; ++j) {
                     ans.set(i, j, activation_funct(ans.get(i, j)));
@@ -40,15 +40,16 @@ class perceptronLayer
 
         matrix calculate_hidden_error(matrix error, matrix pweights)
         {
-            std::vector<float> hidden_error(in);
+            matrix hidden_error({});
+            hidden_error.set_size(0, in);
             for (int i = 0; i < in; ++i) 
             {
-                float error = 0.0;
+                float err = 0.0;
                 for (int j = 0; j < out; ++j) 
                 {
-                    error += gradients[j] * pweights.get(i, j);
+                    err += error.get(0, j) * pweights.get(i, j) * calculate_grad(ans.get(0, j));
                 }
-                hidden_error[i] = error;
+                hidden_error.set(0, i, err);
             }
 
             return hidden_error;
@@ -61,13 +62,17 @@ class perceptronLayer
             {
                 for (int j = 0; j < out; ++j)
                 {
-                    weights.add(i, j, learning_rate * error.get(0, i) * gradients[i]);
+                    weights.add(i, j, learning_rate * error.get(0, i) * calculate_grad(ans.get(0, j)));
                 }
             }
+        }
+        matrix get_weights() {
+            return weights;
         }
 
     private:
         int in;
         int out;
         matrix weights;
+        matrix ans;
 };
