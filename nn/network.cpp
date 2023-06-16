@@ -16,7 +16,7 @@ matrix calculate_error(matrix output_res, matrix result)
     err.set_size(1, output_res.get_size_y());
     for (int i = 0; i < result.get_size_y(); ++i)
     {
-        err.set(0, i, (result.get(0, i) - output_res.get(0, i)) * (result.get(0, i) - output_res.get(0, i)));
+        err.set(0, i, (result.get(0, i) - output_res.get(0, i)));
     }
     return err;
 }
@@ -51,11 +51,13 @@ class NN
             int ans = 0;
             for(int i = 0; i < 10; ++i) 
             {
+                std::cout << now.get(0, i) << ' ';
                 if(now.get(0, i) > now.get(0, ans)) 
                 {
                     ans = i;
                 }
             }
+
             return ans;
         }
 
@@ -63,7 +65,7 @@ class NN
         void learn(matrix rgb, int ans, float learning_rate) {
             matrix target_output;
             target_output.set_size(1, 10);
-            target_output.set(0, ans, 1);
+            target_output.set(0, ans, 10);
 
 
             matrix in = rgb;
@@ -134,12 +136,12 @@ void save_NN(NN to_save, std::string filename)
     std::ofstream out;
     out.open(filename);
     int size = to_save.get_size();
-    out << size;
+    out << size << ' ';
     
     for(int i = 0; i < size; ++i) 
     {
         std::vector<std::vector<float>> weights = to_save.ready_to_print_layer(i);
-        out << weights.size() << ' ' << weights[0].size();
+        out << weights.size() << ' ' << weights[0].size() << ' ';
         for(int i = 0; i < weights.size(); ++i) 
         {
             for(int j = 0; j < weights[i].size(); ++j) 

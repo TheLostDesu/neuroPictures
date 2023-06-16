@@ -19,13 +19,16 @@ int main() {
     std::string dataset_path, dataset_ans_path;
     std::cin >> dataset_path >> dataset_ans_path;
     std::ifstream file, in;
-    in.open(dataset_ans_path);
-    file.open(dataset_path);  
     int magic_number=0;
     int number_of_images=0;
     int n_rows=0;
     int n_cols=0;
     int k;
+    NN recognizer(3, {500, 20, 10}, 28 * 28); 
+
+    for(int ep = 0; ep < 10000; ++ep) {
+    in.open(dataset_ans_path);
+    file.open(dataset_path);  
 
     file.read((char*)&magic_number,sizeof(magic_number));
     magic_number= reverseInt(magic_number);
@@ -36,34 +39,49 @@ int main() {
     n_rows = reverseInt(n_rows);
     n_cols= reverseInt(n_cols);
 
-    NN recognizer(3, {500, 20, 10}, n_rows * n_cols); 
+    
     
     unsigned char ns = 0;
     for(int i = 0; i < 8; ++i) 
     {
         in.read((char*)&ns,sizeof(ns));
     }   
-    for(int i = 0; i < number_of_images; ++i)
-    {
-        matrix image(std::vector<std::vector<float>> (1, std::vector<float>(n_cols * n_rows, 0)));
 
-        for(int r = 0; r < n_rows; ++r)
+
+    float predictions_n = 0, guessed_n = 0;
+    
+        for(int i = 0; i < number_of_images; ++i)
         {
-            for(int c = 0; c < n_cols; ++c)
+            matrix image(std::vector<std::vector<float>> (1, std::vector<float>(n_cols * n_rows, 0)));
+
+            for(int r = 0; r < n_rows; ++r)
             {
-                unsigned char temp = 0;
-                file.read((char*)&temp,sizeof(temp));
-                image.set(0, r * n_rows + c, temp);
+                for(int c = 0; c < n_cols; ++c)
+                {
+                    unsigned char temp = 0;
+                    file.read((char*)&temp,sizeof(temp));
+                    image.set(0, r * n_rows + c, temp);
+                }
+            } 
+            unsigned char ns = 0;
+            in.read((char*)&ns,sizeof(ns));
+            int smth = ns;
+            recognizer.learn(image, smth, 0.01);
+
+            predictions_n++;
+            int prd = recognizer.recognize(image);
+            if(prd == smth) 
+            {
+                guessed_n++;
             }
-        } 
-        unsigned char ns = 0;
-        in.read((char*)&ns,sizeof(ns));
-        int smth = ns;
-        recognizer.learn(image, smth, 0.1);
-        std::cout << smth << ' ' << i << '\n';
-        if(i % 500 == 0) 
-        {
-            save_NN(recognizer, "network.txt");
+            
+            std::cout << prd  << ' ' <<smth << ' ' << i << ' ' << guessed_n << ' ' << predictions_n << ' ' << guessed_n /  predictions_n << '\n';
+            if(i % 500 == 0) 
+            {
+                save_NN(recognizer, "network.txt");
+            }
         }
+        in.close();
+        file.close();
     }
 }

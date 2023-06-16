@@ -31,7 +31,7 @@ class perceptronLayer
             weights.set_size(in, out);
             for(int i = 0; i < in; ++i) {
                 for(int j = 0; j < out; ++j) {
-                    weights.set(i, j, (float(rand())/RAND_MAX));
+                    weights.set(i, j, (float(rand())/RAND_MAX - 0.5)* pow(out,-0.5));
                 }
             }
         }
@@ -47,6 +47,10 @@ class perceptronLayer
         {
             ans = data * weights;
             for(int j = 0; j < out; ++j) {
+                if(activation_funct(ans.get(0, j)) != activation_funct(ans.get(0, j))) {
+                    std::cout << ans.get(0, j) << "WARNING";
+                    system("pause");
+                }
                 ans.set(0, j, activation_funct(ans.get(0, j)));
             }
             return ans;
@@ -62,6 +66,11 @@ class perceptronLayer
                 for (int j = 0; j < out; ++j) 
                 {
                     err += error.get(0, j) * pweights.get(i, j) * calculate_grad(ans.get(0, j));
+                    if(err != err) 
+                    {
+                        std::cout << error.get(0, j) << ' ' << pweights.get(i, j) << ' ' << ans.get(0, j);
+                        system("pause");
+                    }
                 }
                 hidden_error.set(0, i, err);
             }
@@ -72,11 +81,17 @@ class perceptronLayer
         
         void update_weights(matrix error, float learning_rate)
         {
+            
             for (int i = 0; i < in; ++i)
             {
                 for (int j = 0; j < out; ++j)
                 {
-                    weights.add(i, j, learning_rate * error.get(0, i) * calculate_grad(ans.get(0, j)));
+                    weights.add(i, j, learning_rate * error.get(0, j) * calculate_grad(ans.get(0, j)));
+                    if(weights.get(i, j) != weights.get(i, j)) {
+                        std::cout << "NAN_WEIGHTS_WARNING";
+                        std::cout << error.get(0, i) << ' ' << ans.get(0, j);
+                        system("pause");
+                    }
                 }
             }
         }
