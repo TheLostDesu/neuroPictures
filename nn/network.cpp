@@ -65,7 +65,7 @@ class NN
         void learn(matrix rgb, int ans, float learning_rate) {
             matrix target_output;
             target_output.set_size(1, 10);
-            target_output.set(0, ans, 10);
+            target_output.set(0, ans, 1);
 
 
             matrix in = rgb;
